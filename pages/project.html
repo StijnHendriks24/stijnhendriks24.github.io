@@ -9,7 +9,7 @@
 	<body class="is-preload">
 
 		<!-- Header -->
-			<?php $IPATH= $_SERVER["DOCUMENT_ROOT"]."/assets/page sections/"; include($IPATH."header.html") ?>
+			<include src="../assets/page sections/header.html"></include>
 
 		<!-- Main -->
 			<div id="main">
@@ -177,8 +177,7 @@ public class BarrelBase : MonoBehaviour
 
 			</div>
 
-		<!-- Footer -->
-			<?php include($IPATH."footer.html") ?>
+		<?php $IPATH= $_SERVER["DOCUMENT_ROOT"]."../assets/page sections/"; include($IPATH."footer.html") ?>
 
 		<!-- Scripts -->
 			<script src="https://kit.fontawesome.com/61effd4aaa.js" crossorigin="anonymous"></script>
