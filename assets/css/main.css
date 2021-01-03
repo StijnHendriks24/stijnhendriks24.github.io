@@ -97,7 +97,7 @@ input, select, textarea {
 		}
 
 	body, input, select, textarea {
-		color: #a2a2a2;
+		color: #666666;
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 16pt;
 		font-weight: 400;
@@ -121,7 +121,7 @@ input, select, textarea {
 		}
 
 	strong, b {
-		color: #787878;
+		color: #1D1D1D;
 		font-weight: 400;
 	}
 
@@ -131,10 +131,11 @@ input, select, textarea {
 
 	p {
 		margin: 0 0 2em 0;
+		color: #666666;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #787878;
+		color: #1D1D1D;
 		font-weight: 400;
 		line-height: 1em;
 		margin: 0 0 1em 0;
@@ -2498,12 +2499,14 @@ input, select, textarea {
 
 	.collapsible {
 		background-color: #777;
+		border-radius: 0.35em;
+		border: solid 3px #efefef;
 		color: white;
 		cursor: pointer;
 		padding: 18px;
 		width: 100%;
 		border: none;
-		text-align: left;
+		text-align: center;
 		outline: none;
 		font-size: 15px;
 	}
@@ -2517,7 +2520,23 @@ input, select, textarea {
 		max-height: 0;
 		overflow: hidden;
 		transition: max-height 0.2s ease-out;
-		background-color: #f1f1f1;
+		background-color: #DEDEDE;
+		border-radius: 0.35em;
+		color: #292929;
+	}
+
+	pre, code {
+		font-family: monospace, monospace;
+	}
+
+	pre {
+		overflow: auto;
+		margin-bottom: -30px;
+	}
+	
+	pre > code {
+		display: block;
+		word-wrap: normal;
 	}
 
 /* Button */
@@ -2537,7 +2556,7 @@ input, select, textarea {
 		background-color: transparent;
 		border-radius: 0.35em;
 		border: solid 3px #efefef;
-		color: #787878 !important;
+		color: #292929 !important;
 		cursor: pointer;
 		display: inline-block;
 		font-weight: 400;
@@ -2649,7 +2668,7 @@ input, select, textarea {
 	}
 
 		.work-item .image {
-			margin: 0 0 1.5em 0;
+			margin: 0 0 0.5em 0;
 		}
 
 		.work-item h3 {

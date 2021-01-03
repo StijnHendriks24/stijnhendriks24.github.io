@@ -9,13 +9,7 @@
 	<body class="is-preload">
 
 		<!-- Header -->
-			<header id="header">
-				<div class="inner">
-					<a href="#" class="image avatar"><img src="../images/avatar.jpg" alt="" /></a>
-					<h1><strong>I am Stijn Hendriks</strong>, a 20-year old game developement student<br />
-					</a></h1>
-				</div>
-			</header>
+			<?php $IPATH= $_SERVER["DOCUMENT_ROOT"]."/assets/page sections/"; include($IPATH."header.html") ?>
 
 		<!-- Main -->
 			<div id="main">
@@ -44,17 +38,17 @@
 						</header>
 						<div class="row">
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<a class="image fit"><img src="../images/thumbs/07.jpg"/></a>
 								<h3>Risus ornare lacinia</h3>
 								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<a class="image fit"><img src="../images/thumbs/07.jpg"/></a>
 								<h3>Risus ornare lacinia</h3>
 								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<a class="image fit"><img src="../images/thumbs/07.jpg"/></a>
 								<h3>Risus ornare lacinia</h3>
 								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
 							</article>
@@ -184,21 +178,7 @@ public class BarrelBase : MonoBehaviour
 			</div>
 
 		<!-- Footer -->
-			<footer id="footer">
-				<div class="inner">
-					<ul class="icons">
-						<!--<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>-->
-						<li><a href="https://github.com/StijnHendriks24" class="icon brands fa-github"><span class="label">Github</span></a></li>
-						<!--<li><a href="#" class="icon brands fa-itch-io"><span class="label">Itch</span></a></li>-->
-						<li><a href="#" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
-						<!--<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>-->
-						<li><a href="mailto:stijnhendriks24@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-					</ul>
-					<!--<ul class="copyright">
-						<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>-->
-				</div>
-			</footer>
+			<?php include($IPATH."footer.html") ?>
 
 		<!-- Scripts -->
 			<script src="https://kit.fontawesome.com/61effd4aaa.js" crossorigin="anonymous"></script>
