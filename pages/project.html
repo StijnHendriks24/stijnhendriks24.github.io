@@ -23,13 +23,104 @@
 				<!-- One -->
 					<section id="one">
 						<header class="major">
-							<h2>This is a project<br /></h2>
+							<ul class="actions">
+								<li><a href="../index.html" class="button"><i class="fas fa-arrow-left"></i></a></li>
+							</ul>
+							<h2>Test project info<br /></h2>
 						</header>
-						<p>Accumsan orci faucibus id eu lorem semper. Eu ac iaculis ac nunc nisi lorem vulputate lorem neque cubilia ac in adipiscing in curae lobortis tortor primis integer massa adipiscing id nisi accumsan pellentesque commodo blandit enim arcu non at amet id arcu magna. Accumsan orci faucibus id eu lorem semper nunc nisi lorem vulputate lorem neque cubilia.</p>
-						<!--<ul class="actions">
-							<li><a href="#" class="button">Learn More</a></li>
-						</ul>-->
+						<p>
+							<strong>Team size:</strong> 1 <br />
+							<strong>Project length:</strong> 3 weeks <br />
+							<strong>My contribution:</strong> Everything<br />
+							<strong>Platform:</strong> Windows<br />
+							<strong>Engine and tools:</strong> Unity + C#
+						</p>
 					</section>
+
+				<!-- Two -->
+					<section id="two">
+						<header class="major">
+							<h2>Project screenshots<br /></h2>
+						</header>
+						<div class="row">
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="../images/thumbs/07.jpg" alt="" /></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+						</div>
+					</section>
+
+				<!-- Three -->
+					<section id="three">
+						<header class="major">
+							<h2>Code preview<br /></h2>
+						</header>
+						<figure>
+							<figcaption>This is explains the code below</figcaption>
+							<pre>
+								<code>
+public class BarrelBase : MonoBehaviour
+{
+    public List<Transform> shootOrigins = new List<Transform>();
+    public float timeBetweenShots = 1;
+    public int shotsPerBurst = 1;
+    public float timeBetweenBurstShot = 0.1f;
+    public bool isOnHandle = false;
+    public float spread;
+
+    protected bool fire = false;
+    protected float nextFire;
+    protected int burstShotsLeft;
+    protected int shootOriginIndex = 0;
+
+    public void StartFiring()
+    {
+        fire = true;
+    }
+
+    public void EndFiring()
+    {
+        fire = false;
+    }
+
+    protected Vector3 GetShootDirectionWithSpread()
+    {
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
+        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
+        return direction;
+    }
+
+    protected virtual void Shoot()
+    {
+        shootOriginIndex++;
+        if (shootOriginIndex > shootOrigins.Count - 1)
+            shootOriginIndex = 0;
+
+        burstShotsLeft--;
+
+        if (burstShotsLeft > 0)
+            Invoke("Shoot", timeBetweenBurstShot);
+    }
+}
+								</code>
+							</pre>
+						</figure>
+					</section>
+
+					
+
 			</div>
 
 		<!-- Footer -->
