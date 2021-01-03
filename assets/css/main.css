@@ -2494,54 +2494,30 @@ input, select, textarea {
 				border-top: 0;
 			}
 
-/* Image gallery */
+/* Collapsible */
 
-	div.gallery {
-	  border-radius: 0.35em;
-			border: solid 3px #efefef;
-	}
-
-	div.gallery:hover {
-	  border-color: #49bf9d;
-	}
-
-	div.gallery img {
-	  width: 100%;
-	  height: auto;
-	}
-
-	div.desc {
-	  padding: 15px;
-	  text-align: center;
-	}
-
-	* {
-	  box-sizing: border-box;
-	}
-
-	.responsive {
-	  padding: 0 6px;
-	  float: left;
-	  width: 24.99999%;
-	}
-
-	@media only screen and (max-width: 700px) {
-	  .responsive {
-		width: 49.99999%;
-		margin: 6px 0;
-	  }
-	}
-
-	@media only screen and (max-width: 500px) {
-	  .responsive {
+	.collapsible {
+		background-color: #777;
+		color: white;
+		cursor: pointer;
+		padding: 18px;
 		width: 100%;
-	  }
+		border: none;
+		text-align: left;
+		outline: none;
+		font-size: 15px;
 	}
 
-	.clearfix:after {
-	  content: "";
-	  display: table;
-	  clear: both;
+	.active, .collapsible:hover {
+		background-color: #5cc6a7;
+	}
+
+	.content {
+		padding: 0 18px;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.2s ease-out;
+		background-color: #f1f1f1;
 	}
 
 /* Button */
