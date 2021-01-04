@@ -1,0 +1,1 @@
+document.getElementById("headerFile").innerHTML='<header id="header"><div class="inner"><a href="#" class="image avatar"><img src="images/avatar.jpg" alt="" /></a><h1><strong>I am Stijn Hendriks</strong>, a 20-year old game developement student<br /></a></h1></div></header>';
