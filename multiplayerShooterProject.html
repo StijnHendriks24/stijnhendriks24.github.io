@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Stijn Hendriks</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<div id="headerFile"></div>
+
+		<!-- Main -->
+			<div id="main">
+
+				<!-- One -->
+					<section id="one">
+						<header class="major">
+							<ul class="actions">
+								<li><a onclick="history.back()" class="button"><i class="fas fa-arrow-left"></i></a></li>
+							</ul>
+							<h2>Online multiplayer 3D FPS shooter<br /></h2>
+						</header>
+						<p>
+							<strong>Team size:</strong> 3 <br />
+							<strong>Project length:</strong> 5 weeks <br />
+							<strong>My contribution:</strong> ...<br />
+							<strong>Platform:</strong> Windows<br />
+							<strong>Engine and tools:</strong> Unity + C#
+						</p>
+					</section>
+
+				<!-- Two -->
+					<section id="two">
+						<header class="major">
+							<h2>Project screenshots<br /></h2>
+						</header>
+						<div class="row">
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
+								<h3>Risus ornare lacinia</h3>
+								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+							</article>
+						</div>
+					</section>
+
+				<!-- Three -->
+					<section id="three">
+						<header class="major">
+							<h2>Code preview<br /></h2>
+						</header>
+
+						<button class="collapsible">Code from script 1:</button>
+						<div class="content">
+						<figure>
+							<figcaption>This explains the code below</figcaption>
+							<pre>
+								<code>
+public class BarrelBase : MonoBehaviour
+{
+    public List<Transform> shootOrigins = new List<Transform>();
+    public float timeBetweenShots = 1;
+    public int shotsPerBurst = 1;
+    public float timeBetweenBurstShot = 0.1f;
+    public bool isOnHandle = false;
+    public float spread;
+
+    protected bool fire = false;
+    protected float nextFire;
+    protected int burstShotsLeft;
+    protected int shootOriginIndex = 0;
+
+    public void StartFiring()
+    {
+        fire = true;
+    }
+
+    public void EndFiring()
+    {
+        fire = false;
+    }
+
+    protected Vector3 GetShootDirectionWithSpread()
+    {
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
+        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
+        return direction;
+    }
+
+    protected virtual void Shoot()
+    {
+        shootOriginIndex++;
+        if (shootOriginIndex > shootOrigins.Count - 1)
+            shootOriginIndex = 0;
+
+        burstShotsLeft--;
+
+        if (burstShotsLeft > 0)
+            Invoke("Shoot", timeBetweenBurstShot);
+    }
+}
+								</code>
+							</pre>
+						</figure>
+						</div>
+						<br />
+
+						<button class="collapsible">Code from script 2:</button>
+						<div class="content">
+						<figure>
+							<figcaption>This explains the code below</figcaption>
+							<pre>
+								<code>
+public class BarrelBase : MonoBehaviour
+{
+    public List<Transform> shootOrigins = new List<Transform>();
+    public float timeBetweenShots = 1;
+    public int shotsPerBurst = 1;
+    public float timeBetweenBurstShot = 0.1f;
+    public bool isOnHandle = false;
+    public float spread;
+
+    protected bool fire = false;
+    protected float nextFire;
+    protected int burstShotsLeft;
+    protected int shootOriginIndex = 0;
+
+    public void StartFiring()
+    {
+        fire = true;
+    }
+
+    public void EndFiring()
+    {
+        fire = false;
+    }
+
+    protected Vector3 GetShootDirectionWithSpread()
+    {
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
+        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
+        return direction;
+    }
+
+    protected virtual void Shoot()
+    {
+        shootOriginIndex++;
+        if (shootOriginIndex > shootOrigins.Count - 1)
+            shootOriginIndex = 0;
+
+        burstShotsLeft--;
+
+        if (burstShotsLeft > 0)
+            Invoke("Shoot", timeBetweenBurstShot);
+    }
+}
+								</code>
+							</pre>
+						</figure>
+						</div>
+						<br />
+
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="https://kit.fontawesome.com/61effd4aaa.js" crossorigin="anonymous"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/collapsible.js"></script>
+			<script src="assets/js/header.js"></script> 
+
+	</body>
+</html>

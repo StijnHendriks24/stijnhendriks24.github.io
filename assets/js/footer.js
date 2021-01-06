@@ -1,1 +1,2 @@
 document.getElementById("footerFile").innerHTML='<footer id="footer"><div class="inner"><ul class="icons"><li><a href="https://github.com/StijnHendriks24" class="icon brands fa-github"><span class="label">Github</span></a></li><li><a href="https://www.linkedin.com/in/stijn-hendriks-68a32018a/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li><li><a href="mailto:stijnhendriks24@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li></ul></div></footer>';
+
