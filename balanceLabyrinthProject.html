@@ -23,12 +23,17 @@
 							<h2>Balance labyrinth<br /></h2>
 						</header>
 						<p>
-							<strong>Team size:</strong> 1 <br />
-							<strong>Project length:</strong> 8 days <br />
-							<strong>My contribution:</strong> Everything<br />
+							Tijdens mijn laatste jaar van de opleiding kreeg ik de opdracht om voor het vak Mobile Apps een game te maken.
+							Deze game moet op een mobiele telefoon gespeeld kunnen worden en het moet gebruik maken van minimaal 1 sensor.
+							De sensor die ik heb gebruikt voor dit project is de accelerator om de ball te laten rollen.
+						</p>
+						<p>
+							<strong>Team:</strong> 1 persoon<br />
+							<strong>Project lengte:</strong> 8 dagen <br />
+							<strong>Mijn taken:</strong> Alles<br />
 							<strong>Platform:</strong> Android<br />
-							<strong>Engine and tools:</strong> Unity + C#<br />
-							<strong>Status:</strong> ...
+							<strong>Engine & tools:</strong> Unity + C#<br />
+							<strong>Status:</strong> Afgerond op 11-11-2020<br />
 						</p>
 					</section>
 
@@ -39,19 +44,19 @@
 						</header>
 						<div class="row">
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/labyrinth/2.png"/></a>
+								<h3>Main menu</h3>
+								<p>Dit is het main menu van de game. Hier begint de speler zodra de game opstart.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/labyrinth/1.png"/></a>
+								<h3>Game scene</h3>
+								<p>Elk level in deze game is random gegenereert. Dit zorgt voor meer replayability.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/labyrinth/3.png"/></a>
+								<h3>Game scene pauze</h3>
+								<p>Deze game is ontworpen voor android vandaar dat de game verder gaat als de speler naast de main menu knop drukt.</p>
 							</article>
 						</div>
 					</section>
@@ -62,113 +67,151 @@
 							<h2>Code preview<br /></h2>
 						</header>
 
-						<button class="collapsible">Code from script 1:</button>
+						<button class="collapsible">CreateMaze() from LevelGenerator.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Deze functie cre&eumlert een maze op de grid doormiddel van recursive backtracking.</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>void CreateMaze()
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    // Get first cell
+    Cell currentCell = grid[0];
+    // Register first cell as visited
+    visited.Add(currentCell);
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
+    // Set up for the loop
+    int lastVisitedIndex = 0;
+    bool CreatedMaze = false;
 
-    public void StartFiring()
+    while (!CreatedMaze)
     {
-        fire = true;
-    }
+        // Get neighbours off current cell
+        List<Cell> neighbours = GetNeighbours(currentCell);
+        // Remove all neighbours that have already been visited
+        neighbours.RemoveAll(s => visited.Contains(s));
 
-    public void EndFiring()
-    {
-        fire = false;
-    }
+        // If current cell has NO neighbours that are not yet visited
+        if (neighbours.Count == 0)
+        {
+            // Go one step back
+            lastVisitedIndex--;
+            // If we are back at the beginning
+            if (lastVisitedIndex == 0)
+                // Finish the loop
+                CreatedMaze = true;
+            else // If we are not at the beginning, set last visited cell as the current cell
+                currentCell = visited[lastVisitedIndex];
+        }
+        else // If current cell has neighbours that are not yet visited
+        {
+            // Get random neighbour
+            Cell randomNeighbour = neighbours[Random.Range(0, neighbours.Count)];
 
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
+            // Add random neighbour to nextcells for current cell
+            currentCell.nextCells.Add(randomNeighbour);
 
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
+            // Set random cells previous cell as current cell
+            randomNeighbour.previousCell = currentCell;
 
-        burstShotsLeft--;
+            // Set random as current cell
+            currentCell = randomNeighbour;
 
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+            // Add random cell to visited cells
+            visited.Add(randomNeighbour);
+
+            // Update index
+            lastVisitedIndex = visited.Count;
+            // Clear neighbour list just to be sure
+            neighbours.Clear();
+        }
     }
 }
-								</code>
+</code>
 							</pre>
 						</figure>
 						</div>
 						<br />
 
-						<button class="collapsible">Code from script 2:</button>
+						<button class="collapsible">CreateFinalPath() from LevelGenerator.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Deze functie maakt op basis van de maze gecre&eumlert in de functie hierboven, een enkel pad doormiddel van breadth first search.
+                            Op deze manier zijn er geen doodlopende stukken in het level.
+                            </figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>void CreateFinalPath()
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    // Get first cell
+    Cell currentCell = grid[0];
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
+    // Create dictionary to save all possible paths
+    Dictionary<int, List<Cell>> paths = new Dictionary<int, List<Cell>>();
+    paths.Add(0, new List<Cell>() { currentCell });
 
-    public void StartFiring()
+    bool finished = false;
+    while (!finished)
     {
-        fire = true;
+        // Get all the current cells
+        List<Cell> currentCells = paths[paths.Count - 1];
+
+        List<Cell> nextCells = new List<Cell>();
+
+        // Loop through all current cells
+        foreach (var item in currentCells)
+        {
+            // Add current cells nextcells to the list
+            nextCells.AddRange(item.nextCells);
+        }
+
+        // If cells have been added to the list
+        if (nextCells.Count > 0)
+        {
+            // Add the list to the dictionary
+            paths.Add(paths.Count, nextCells);
+        }
+        else // If no cells have been added
+        {
+            // Finish the loop
+            finished = true;
+        }
     }
 
-    public void EndFiring()
+    // Get the last cell from the dictionary using a random
+    List<Cell> lastCells = paths[paths.Count - 1];
+    Cell lastCell = lastCells[Random.Range(0, lastCells.Count)];
+
+    // Set up for the loop
+    Cell cell = lastCell;
+    Cell previousCell = null;
+    finalPath.Add(lastCell);
+
+    bool done = false;
+    while (!done)
     {
-        fire = false;
-    }
+        // If current cell has a previous cell
+        if (cell.previousCell != null)
+        {
+            // Add previous cell to the final path
+            finalPath.Add(cell.previousCell);
 
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
+            // Set up for next iteration
+            if (previousCell != null)
+                cell.NextFinalCell = previousCell;
+            previousCell = cell;
+            cell = cell.previousCell;
+        }
+        else // If current cell does not have a previous cell
+        {
+            // Add final previous cell to current cell
+            if (previousCell != null)
+                cell.NextFinalCell = previousCell;
 
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+            // Finish the loop
+            done = true;
+        }
     }
 }
-								</code>
+</code>
 							</pre>
 						</figure>
 						</div>

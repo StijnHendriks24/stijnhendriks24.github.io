@@ -23,12 +23,19 @@
 							<h2>Online multiplayer 3D FPS shooter<br /></h2>
 						</header>
 						<p>
-							<strong>Team size:</strong> 3 <br />
-							<strong>Project length:</strong> 5 weeks <br />
-							<strong>My contribution:</strong> ...<br />
+							In het tweede jaar van mijn opleiding kregen we de opdracht om in groepen van ongeveer drie personen een 3D FPS shooter game te maken.
+							Samen met mijn groep hebben we ervoor gekozen om de uitdaging te vergroten door het een online multiplayer game te maken.
+							Voor het multiplayer aspect hebben we gebruik gemaakt van Photon.
+						</p>
+						<p>
+							<strong>Team:</strong> 3 personen<br />
+							<strong>Project lengte:</strong> 5 weken <br />
+							<strong>Mijn taken:</strong><br />
+							Tijdens dit project waren mijn grootste taken het maken van de online multiplayer aspecten en de gun behaviour.
+							<br />
 							<strong>Platform:</strong> Windows<br />
-							<strong>Engine and tools:</strong> Unity + C#<br />
-							<strong>Status:</strong> ...
+							<strong>Engine & tools:</strong> Unity + C#<br />
+							<strong>Status:</strong> Afgerond op 16-04-2020<br />
 						</p>
 					</section>
 
@@ -39,19 +46,35 @@
 						</header>
 						<div class="row">
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/shooter/2.png"/></a>
+								<h3>Main menu</h3>
+								<p>Dit is het main menu van de game. Hier begint de speler zodra de game opstart. 
+								Zoals links onderin te zien is ben ik op dit moment verbonden met de RU server.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/shooter/9.png"/></a>
+								<h3>Room menu</h3>
+								<p>Dit is het scherm van de multiplayer room. 
+								Hier is te zien hoeveel mensen er in de room zitten en staat de code om andere te laten joinen.
+								Voor deze screenshot had ik een build draaiend en de editor. 
+								Vandaar dat er twee personen in de room zitten.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/shooter/5.png"/></a>
+								<h3>Level 1</h3>
+								<p>Dit is het eerste level van de game. 
+								Het doel is om alle enemies te doden voordat je naar het volgende level kan.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/shooter/7.png"/></a>
+								<h3>Level 2</h3>
+								<p>Dit is het tweede level van de game. 
+								Zoals je kunt zien krijg je een nieuw wapen als je het volgende level betreedt.</p>
+							</article>
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/shooter/8.png"/></a>
+								<h3>Level 2 einde</h3>
+								<p>Als je alle enemies binnen een level dood zijn gaan de liftdeuren open en kun je naar het volgende level.</p>
 							</article>
 						</div>
 					</section>
@@ -62,113 +85,92 @@
 							<h2>Code preview<br /></h2>
 						</header>
 
-						<button class="collapsible">Code from script 1:</button>
+						<button class="collapsible">RoomButtons.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Dit script zit op de room buttons in de lijst van alle open game rooms. 
+							Als de speler op deze button drukt joint hij de game room.
+							</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>// Function that is called on this button clicked
+public void JoinRoomOnClick() 
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
-
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
-
-    public void StartFiring()
-    {
-        fire = true;
-    }
-
-    public void EndFiring()
-    {
-        fire = false;
-    }
-
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
-
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
-    }
+    PhotonNetwork.JoinRoom(roomName);
 }
-								</code>
+
+//	Variables to show on the button
+public void SetRoom(string nameInput, int sizeInput, int countInput)
+{
+    roomName = nameInput;
+    roomSize = sizeInput;
+    playerCount = countInput;
+    nameText.text = nameInput;
+    sizeText.text = countInput + "/" + sizeInput;
+}
+</code>
 							</pre>
 						</figure>
 						</div>
 						<br />
 
-						<button class="collapsible">Code from script 2:</button>
+						<button class="collapsible">Shoot() from Gun.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Gun.cs is de base class voor alle guns in de game. 
+							Vanwege de multiplayer bevat deze functie server calls om ervoor te zorgen dat het bij iedereen in de room gebeurt (RPC call).
+							</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>protected void Shoot(Ray ray)
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    // Calculate the time at which the regen should start again
+    regenDelay = Time.time + regenDelayAfterShot;
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
+    // Decrease current amount of ammo
+    currentAmmo -= costPerShot;
+    UpdateCooldownBar();
 
-    public void StartFiring()
+    // Gun recoil animation
+    if (recoilAnimation != null)
+        recoilAnimation.SetTrigger("Shot");
+
+    // If player should receive a penalty for using all the ammo
+    if (currentAmmo <= penaltyBar)
     {
-        fire = true;
+        canShoot = false;
+        photonView.RPC("OverHeatSmoke", RpcTarget.All, true);
     }
 
-    public void EndFiring()
+    // RPC calls to make it happen across the server
+    photonView.RPC("MuzzleFlash", RpcTarget.All);
+
+    // If audio source is available
+    if (audioSource != null)
     {
-        fire = false;
+        // Play shot sound
+        audioSource.clip = shotSound;
+        audioSource.Play();
     }
 
-    protected Vector3 GetShootDirectionWithSpread()
+    // Raycast
+    if (Physics.Raycast(ray, out RaycastHit hit, range, shootableLayer))
     {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
-
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+        // Get enemy behaviour of the object we hit
+        EnemyBehaviour enemyBehaviour = hit.collider.gameObject.GetComponentInParent<EnemyBehaviour>();
+        if(enemyBehaviour != null)
+        {
+            // Spawn hit effect and call take damage on the enemy
+            GameObject effect = PhotonNetwork.Instantiate(enemyHitParticle, hit.point, Quaternion.LookRotation(hit.normal));
+            effect.transform.SetParent(hit.transform);
+            enemyBehaviour.TakeDamage(damage, player);
+        }
+        else
+        {
+            // Spawn hit effect
+            PhotonNetwork.Instantiate(EnvironmentImpactParticle, hit.point + hit.normal * floatInfrontOfWall, Quaternion.LookRotation(hit.normal));
+        }
     }
 }
-								</code>
+</code>
 							</pre>
 						</figure>
 						</div>

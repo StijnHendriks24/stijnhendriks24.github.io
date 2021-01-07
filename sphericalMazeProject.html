@@ -23,12 +23,19 @@
 							<h2>Spherical maze<br /></h2>
 						</header>
 						<p>
-							<strong>Team size:</strong> 1 <br />
-							<strong>Project length:</strong> 5 days <br />
-							<strong>My contribution:</strong> Everything<br />
+							Tijdens mijn zoektocht naar een stage aan het eind van mijn eerste leerjaar kreeg ik van een bedrijf de opdracht om een random maze generator te maken.
+							Dat vond ik zo'n leuke opdracht dat ik daarna meerdere soorten random maze generators heb gemaakt.
+							Vandaar dat ik bij het idee ben gekomen om een random spherical maze generator te maken.
+							Dit project is in zijn huidige staat een prototype.
+							Het is de bedoeling om uiteindelijk de speler de kans te geven om op de sphere rond te laten lopen.
+						</p>
+						<p>
+							<strong>Team:</strong> 1 persoon<br />
+							<strong>Project lengte:</strong> 5 dagen <br />
+							<strong>Mijn taken:</strong> Alles<br />
 							<strong>Platform:</strong> Windows<br />
-							<strong>Engine and tools:</strong> Unity + C#<br />
-							<strong>Status:</strong> ...
+							<strong>Engine & tools:</strong> Unity + C#<br />
+							<strong>Status:</strong> Back burner<br />
 						</p>
 					</section>
 
@@ -39,19 +46,18 @@
 						</header>
 						<div class="row">
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/maze/6.png"/></a>
+								<h3>Spherical maze 1</h3>
+								<p>Dit is een screenshot van hoe een spherical maze er op dit moment uit zou kunnen zien.</p>
 							</article>
+
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
-							</article>
-							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/maze/7.png"/></a>
+								<h3>Spherical maze 2</h3>
+								<p>
+								Deze screenshot is van dezelfde maze als de vorige alleen is de camera een stuk naar rechts geroteerd om de zijkant beter te laten zien.
+								Als je aan de linkerkant kijkt zie je sommige getallen van de vorige screenshot.
+								</p>
 							</article>
 						</div>
 					</section>
@@ -62,113 +68,86 @@
 							<h2>Code preview<br /></h2>
 						</header>
 
-						<button class="collapsible">Code from script 1:</button>
+						<button class="collapsible">GeneratePath() from Sphere.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Deze functie cre&eumlert een path op de sphere doormiddel van recursive backtracking.</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>void GeneratePath()
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    // Set color for the path polygons
+    pathColor = new Color32(255, 0, 0, 1);
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
+    randomPolygon = SpherePolygons[0];
 
-    public void StartFiring()
+    VisualizePolygon(randomPolygon);
+
+    randomPolygon.visited = true;
+    visitedPolygons.Add(randomPolygon);
+
+    while (!pathGenerated)
     {
-        fire = true;
-    }
+        // Get neighbours
+        List<Polygon> neighbours = GetNeighbours(randomPolygon);
+        neighbours.RemoveAll(s => s.visited == true);
+        if (neighbours.Count > 0) // There ARE neighbours that are not visited
+        {
+            // Get random neighbour
+            Polygon randomNeighbour = neighbours[Random.Range(0, neighbours.Count)];
 
-    public void EndFiring()
-    {
-        fire = false;
-    }
+            RegisterPathPolygon(randomNeighbour);
 
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
-
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+            // Reset visited index to last visited
+            lastVisitedIndex = visitedPolygons.Count;
+        }
+        else // There are NO neighbours that are not visited
+        {
+            // Go one back in the list of the current path
+            lastVisitedIndex--;
+            if(lastVisitedIndex > 0)
+                randomPolygon = visitedPolygons[lastVisitedIndex];
+            else
+                pathGenerated = true;
+        }
     }
 }
-								</code>
+</code>
 							</pre>
 						</figure>
 						</div>
 						<br />
 
-						<button class="collapsible">Code from script 2:</button>
+						<button class="collapsible">GetNeighbours() from Sphere.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Deze functie is ontworpen om de buren van de huidige polygon te zoeken voor de GeneratePath().
+							De manier waarop het nu gebeurd is dat er door de lijst met polygons heen gelopen wordt en te kijken of de huidige polygon twee vertices heeft deelt met de polygon uit de lijst.
+							In de toekomst is het mijn doel om deze functie te verbeteren zodat het nog sneller een maze kan genereren.
+							</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+								<code>List<Polygon> GetNeighbours(Polygon polygon)
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    List<Polygon> neighbours = new List<Polygon>();
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
-
-    public void StartFiring()
+    // Loop through all polygons
+    foreach (var item in SpherePolygons)
     {
-        fire = true;
+        // Check the amount of matching vertices
+        int matches = 0;
+        for (int i = 0; i < item.vertices.Count; i++)
+        {
+            if (polygon.vertices.Contains(item.vertices[i]))
+                matches++;
+        }
+
+        // If these 2 polygons share 2 vertices, they are neighbours
+        if (matches == 2)
+            neighbours.Add(item);
     }
 
-    public void EndFiring()
-    {
-        fire = false;
-    }
-
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
-
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
-    }
+    return neighbours;
 }
-								</code>
+</code>
 							</pre>
 						</figure>
 						</div>

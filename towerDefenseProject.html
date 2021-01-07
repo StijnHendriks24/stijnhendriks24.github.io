@@ -23,12 +23,19 @@
 							<h2>3D tower defense<br /></h2>
 						</header>
 						<p>
-							<strong>Team size:</strong> 3 <br />
-							<strong>Project length:</strong> 4 weeks <br />
-							<strong>My contribution:</strong> ...<br />
+							In het tweede jaar van mijn opleiding kregen we de opdracht om in groepen van ongeveer drie personen een 3D tower defense game te maken.
+							Samen met mijn groep hebben we ervoor gekozen om als thema het heelal te gebruiken.
+							De speler zal de aarde moeten beschermen tegen astero&iumlden door middel van het plaatsen van gevechtsschepen.
+						</p>
+						<p>
+							<strong>Team:</strong> 3 personen<br />
+							<strong>Project lengte:</strong> 4 weken <br />
+							<strong>Mijn taken:</strong><br />
+							Tijdens dit project waren mijn grootste taken het maken van de random path, de tower placement en de tower behaviour.
+							<br />
 							<strong>Platform:</strong> Windows<br />
-							<strong>Engine and tools:</strong> Unity + C#<br />
-							<strong>Status:</strong> ...
+							<strong>Engine & tools:</strong> Unity + C#<br />
+							<strong>Status:</strong> Afgerond op 24-03-2020<br />
 						</p>
 					</section>
 
@@ -39,136 +46,305 @@
 						</header>
 						<div class="row">
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/tower/1.png"/></a>
+								<h3>Main menu</h3>
+								<p>Dit is het main menu van de game. Hier begint de speler zodra de game opstart.</p>
 							</article>
+
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/tower/7.png"/></a>
+								<h3>Game scene</h3>
+								<p>Dit is hoe de het spel eruit ziet tijdens het spelen. 
+                                Aan de rechterkant van het scherm staan alle "towers" die de speler kan bouwen om de aarde tegen astero&iumlden te beschermen.</p>
 							</article>
+
 							<article class="col-6 col-12-xsmall work-item">
-								<a class="image fit"><img src="images/thumbs/07.jpg"/></a>
-								<h3>Risus ornare lacinia</h3>
-								<p>Lorem ipsum dolor sit amet nisl sed nullam feugiat.</p>
+								<a class="image fit"><img src="images/tower/3.png"/></a>
+								<h3>Boss fight</h3>
+								<p>Hier is de boss fight te zien. Als de speler de boss heeft verslagen heeft hij gewonnen.</p>
+							</article>
+
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/tower/4.png"/></a>
+								<h3>Eindscherm</h3>
+								<p>Dit is het scherm na het spelen. Hier krijgt de speler te zien hoe hij het heeft gedaan.</p>
 							</article>
 						</div>
 					</section>
 
 				<!-- Three -->
 					<section id="three">
+
 						<header class="major">
 							<h2>Code preview<br /></h2>
 						</header>
 
-						<button class="collapsible">Code from script 1:</button>
+						<button class="collapsible">TowerBuilder.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Hieronder is de update functie te zien van TowerBuilder.cs. Dit script zorgt voor het bouwen van de gevechtsschepen.
+                            Terugkijkend op dit project zou ik dit script verdelen in verschillende functies zodat het onder andere makkelijk te overzien is.</figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+<code>// If mouse is not over a UI element
+if (!EventSystem.current.IsPointerOverGameObject())
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
-
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
-
-    public void StartFiring()
+    // If player is in build mode
+    if (buildMode)
     {
-        fire = true;
+        // If player presses tab, player leaves buildmode
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            // Disable the screen border
+            modeBorder.enabled = false;
+            buildMode = false;
+            // Make last tile hovered over invisible
+            if (previousTile != null)
+                previousTile.GetComponent<Renderer>().enabled = false;
+            // Remove the tower preview
+            Destroy(towerVisual);
+        }
+
+        // Shoot raycast on mouse position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        // If raycast hit something
+        if (Physics.Raycast(ray, out hit))
+        {
+            GameObject hitObject = hit.collider.gameObject;
+            Tile selectedTile = hitObject.GetComponent<Tile>();
+
+            // If the object the ray hit is a tile
+            if (selectedTile != null)
+            {
+                // If tower visual is empty
+                if (towerVisual == null)
+                {
+                    // Create tower preview
+                    towerVisual = Instantiate(towerPrefab, hitObject.transform.position + buildOffset, towerPrefab.transform.rotation);
+                    rotationIndex = 0;
+                }
+                // If there is an tower visual
+                else
+                {
+                    // If the current selected tile is not the same as the previous selected tile (to prevent constant update)
+                    if(selectedTile.gameObject != previousTile)
+                    {
+                        // If current selected tile tower is empty, move tower visual to that tile
+                        if (selectedTile.CurrentTower == null && selectedTile.Available)
+                        {
+                            // Visualizes the hover on the selected tile
+                            if(previousTile != null)
+                                previousTile.GetComponent<Renderer>().enabled = false;
+                            selectedTile.gameObject.GetComponent<Renderer>().enabled = true;
+                            // Set selected tile
+                            previousTile = selectedTile.gameObject;
+                            // Set tower visual position to selected tile position
+                            towerVisual.transform.position = hitObject.transform.position + buildOffset;
+                        }
+                    }
+
+                    // Rotate tower to the right
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        // Sets the rotation to the next one in the list (this is to make sure the rotation is spot on)
+                        rotationIndex++;
+                        if (rotationIndex > towerRotations.Count - 1)
+                            rotationIndex = 0;
+                        towerVisual.transform.eulerAngles = new Vector3(0, towerRotations[rotationIndex], 0);
+                    }
+                }
+
+                // If user uses left mouse button
+                if (Input.GetMouseButtonDown(0))
+                {
+                    // If selected tile tower is null, place tower
+                    if (selectedTile.CurrentTower == null && selectedTile.Available)
+                    {
+                        // Check if player has enough money
+                        Tower tower = towerVisual.GetComponent<Tower>();
+                        if (currencyManager.currentMoney >= tower.cost)
+                        {
+                            // Decrease players money
+                            currencyManager.IncreaseMoney(-tower.cost);
+                            // Spawn tower at the selected tile
+                            selectedTile.CurrentTower = Instantiate(towerPrefab, hitObject.transform.position + buildOffset, towerVisual.transform.rotation, transform);
+                            selectedTile.CurrentTower.GetComponent<Tower>().PlaceTower(selectedTile);
+                            selectedTile.currentTowerCost = tower.cost;
+                            towerTotal++;
+                            PlayerPrefs.SetInt("Towers", towerTotal);
+                        }
+                    }
+                }
+            }
+        }
+        // If raycast hit nothing
+        else
+        {
+            // Destroy tower visual if there is one
+            if (towerVisual != null)
+            {
+                if (previousTile != null)
+                    previousTile.GetComponent<Renderer>().enabled = false;
+                Destroy(towerVisual);
+                towerVisual = null;
+            }
+        }
     }
-
-    public void EndFiring()
+    // If the player is in destruction mode
+    else if (destructionMode)
     {
-        fire = false;
-    }
+        // If player presses tab, player leaves buildmode
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            modeBorder.enabled = false;
+            destructionMode = false;
+        }
 
-    protected Vector3 GetShootDirectionWithSpread()
-    {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
-    }
+        // Shoot raycast on mouse position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-    protected virtual void Shoot()
-    {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
+        // If raycast hit something
+        if (Physics.Raycast(ray, out hit))
+        {
+            GameObject hitObject = hit.collider.gameObject;
 
-        burstShotsLeft--;
+            Tile selectedTile = hitObject.GetComponent<Tile>();
 
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+            // If the object the ray hit is a tile
+            if (Input.GetMouseButtonDown(0)) 
+            {
+                // If user uses left mouse button
+                if (selectedTile != null)
+                {
+                    // If selected tile tower is not null, destroy tower
+                    if (selectedTile.CurrentTower != null)
+                    {
+                        selectedTile.DestroyTower();
+                        //currencyManager.IncreaseMoney(selectedTile.currentTowerCost / refundDividers);
+                    }
+                }
+            }
+        }
     }
 }
-								</code>
+// Destroy tower visual when mouse is over UI
+else
+{
+    if (towerVisual != null)
+        Destroy(towerVisual);
+}
+</code>
 							</pre>
 						</figure>
 						</div>
 						<br />
 
-						<button class="collapsible">Code from script 2:</button>
+						<button class="collapsible">MapGenerator.cs</button>
 						<div class="content">
 						<figure>
-							<figcaption>This explains the code below</figcaption>
+							<figcaption>Hieronder zijn de twee belangrijkste functies van MapGenerator.cs te vinden. 
+                            Deze zorgen voor een random path die de enemies zullen volgen.
+                            Terugkijkend op dit project zou ik ervoor kiezen om bijvoorbeeld A* te gebruiken i.p.v. het volledig zelf te maken.
+                            </figcaption>
 							<pre>
-								<code>
-public class BarrelBase : MonoBehaviour
+<code>void GeneratePath()
 {
-    public List<Transform> shootOrigins = new List<Transform>();
-    public float timeBetweenShots = 1;
-    public int shotsPerBurst = 1;
-    public float timeBetweenBurstShot = 0.1f;
-    public bool isOnHandle = false;
-    public float spread;
+    // Get random begin & end from the opposite edge lines
+    begin = widthLineBottom[Random.Range(0, widthLineBottom.Count)];
+    end = widthLineTop[Random.Range(0, widthLineTop.Count)];
 
-    protected bool fire = false;
-    protected float nextFire;
-    protected int burstShotsLeft;
-    protected int shootOriginIndex = 0;
+    // Gets the random tiles on the grid for midpoints
+    FindRandomOnGrid();
 
-    public void StartFiring()
+    // Sets closest tile to beginning and set end
+    closestsTile = grid.Single(s => s.Value == begin).Key;
+    endPos = grid.Single(s => s.Value == end).Key;
+
+    // Loop through all random tiles on the map and generate a path from the current position to that random tile
+    for (int i = 0; i < randomTarget.Count; i++)
     {
-        fire = true;
+        // Generate a path to the random tile
+        randomPos = grid.Single(s => s.Value == randomTarget[i]).Key;
+        GenerateTo(randomPos);
     }
 
-    public void EndFiring()
+    // Generates the rest of the path to the end
+    GenerateTo(endPos);
+
+    // Disable building on all tiles of the path
+    foreach (var item in path)
     {
-        fire = false;
+        item.GetComponentInChildren<Tile>().Available = false;
     }
 
-    protected Vector3 GetShootDirectionWithSpread()
+    // For all tiles in the grid
+    foreach (KeyValuePair<Vector2, GameObject> item in grid)
     {
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-        Vector3 direction = shootOrigins[shootOriginIndex].transform.forward + new Vector3(x, y, 0);
-        return direction;
+        // If the current tile is not a part of the path
+        if (!path.Contains(item.Value))
+        {
+            // Set material to hover material an hide the tile
+            Renderer renderer = item.Value.GetComponentInChildren<Renderer>();
+            renderer.enabled = false;
+            renderer.material = tileHoverMat;
+        }
     }
 
-    protected virtual void Shoot()
+    // Add all children to a list
+    List<GameObject> children = new List<GameObject>();
+    for (int i = 0; i < transform.childCount; i++)
     {
-        shootOriginIndex++;
-        if (shootOriginIndex > shootOrigins.Count - 1)
-            shootOriginIndex = 0;
-
-        burstShotsLeft--;
-
-        if (burstShotsLeft > 0)
-            Invoke("Shoot", timeBetweenBurstShot);
+        children.Add(transform.GetChild(i).gameObject);
     }
+
+    // Get center of map
+    Vector3 center = FindCenterPoint(children);
+
+    // Set the center of the map to be the target of the camera
+    Camera.main.GetComponentInParent<CameraBehaviour>().CalibrateCamera(center, width, height);
+
+    EnemyWaves spawner = GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemyWaves>();
+    spawner.WaveFunction(begin);
 }
-								</code>
+
+void GenerateTo(Vector2 target)
+{
+    // Calculates distance between current tile and target tile
+    float distance = Vector2.Distance(target, closestsTile);
+
+    // Loop till we are at the target
+    while (closestsTile != target)
+    {
+        // Add current selected tile to the path list
+        path.Add(grid[closestsTile]);
+
+        // If tile is on uneven coordinates, add offset and get all neighbors
+        float offset = (closestsTile.y % 2);
+        List<GameObject> neighbors = GetNeighbors(closestsTile, offset);
+
+        // Loop through all neighbors off the current tile
+        foreach (var item in neighbors)
+        {
+            // Calculate the distance between current selected neighbor and the target
+            float dist = Vector2.Distance(grid.Single(s => s.Value == item).Key, target);
+            // If that distance is shorter than the distance between the current tile and the target
+            if (dist < distance)
+            {
+                // Set the current tile to this neighbor
+                closestsTile = grid.Single(s => s.Value == item).Key;
+                // Set the distance for the next check
+                distance = Vector2.Distance(closestsTile, target);
+            }
+        }
+
+        path.Add(grid[closestsTile]);
+    }
+    // Add the end tile to the path list
+    path.Add(grid[closestsTile]);
+}
+</code>
 							</pre>
 						</figure>
 						</div>

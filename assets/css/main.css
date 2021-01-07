@@ -2140,17 +2140,27 @@ input, select, textarea {
 				width: 100%;
 			}
 
-		.image.avatar {
-			border-radius: 100%;
-		}
-
 			.image.avatar:before {
 				display: none;
 			}
 
 			.image.avatar img {
-				border-radius: 100%;
-				width: 100%;
+				/* make a square container */
+				width: 150px;
+				height: 150px;
+
+				/* fill the container, preserving aspect ratio, and cropping to fit */
+				background-size: cover;
+
+				/* center the image vertically and horizontally */
+				background-position: center center;
+
+				/* round the edges to a circle with border radius 1/2 container size */
+				border-radius: 50%;
+
+				border: 3px;
+				border-style: solid;
+				border-color: #5cc6a7;
 			}
 
 /* List */
@@ -2703,7 +2713,7 @@ input, select, textarea {
 		justify-content: space-between;
 		background-color: #1f1815;
 		background-attachment: scroll,								scroll;
-		background-image: url("images/overlay.png"), url("../../images/darkmaze10.jpg"); /* Background URL */
+		background-image: url("images/overlay.png"), url("../../images/background/11.jpg"); /* Background URL */
 		background-position: top left,							top left;
 		background-repeat: repeat,								no-repeat;
 		background-size: auto,								150%;
@@ -2746,11 +2756,7 @@ input, select, textarea {
 			font-size: 1.35em;
 			line-height: 1.75em;
 			margin: 0;
-		}
-
-		#header .image.avatar {
-			margin: 0 0 1em 0;
-			width: 6.25em;
+			height: 6.25em;
 		}
 
 /* Footer */
@@ -2760,7 +2766,7 @@ input, select, textarea {
 	}
 
 		#footer .icons a {
-			color: rgba(255, 255, 255, 0.4);
+			color: rgba(255, 255, 255, 0.75); /* Icons */
 		}
 
 	#footer .copyright {
@@ -3113,11 +3119,8 @@ input, select, textarea {
 
 				#header h1 {
 					font-size: 1.25em;
+					height: 10em;
 				}
-
-					#header h1 br {
-						display: none;
-					}
 
 				#header > .inner {
 					margin-bottom: 0;
@@ -3172,11 +3175,13 @@ input, select, textarea {
 				text-align: center;
 				top: auto;
 				width: 100%;
+				
 				display: block;
 			}
 
 				#header h1 {
 					font-size: 1.75em;
+					height: 6.25em;
 				}
 
 					#header h1 br {
@@ -3273,6 +3278,7 @@ input, select, textarea {
 
 				#header h1 {
 					font-size: 1.35em;
+					height: 6.25em;
 				}
 
 		/* Footer */
@@ -3316,7 +3322,7 @@ input, select, textarea {
 			}
 
 				#header h1 br {
-					display: none;
+					height: 6.25em;
 				}
 
 		/* Footer */
