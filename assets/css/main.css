@@ -2140,10 +2140,6 @@ input, select, textarea {
 				width: 100%;
 			}
 
-			.image.avatar:before {
-				display: none;
-			}
-
 			.image.avatar img {
 				/* make a square container */
 				width: 150px;
