@@ -1,0 +1,329 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Stijn Hendriks</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<div id="headerFile"></div>
+
+		<!-- Main -->
+			<div id="main">
+
+				<!-- One -->
+					<section id="one">
+						<header class="major">
+							<ul class="actions">
+								<li><a onclick="history.back()" class="button"><i class="fas fa-arrow-left"></i></a></li>
+							</ul>
+							<h2>VR examen project<br /></h2>
+						</header>
+						<p>
+							Als laatste opdracht voor mijn opleiding maak ik samen met een klasgenoot een VR game voor het Gelderse Vallei ziekenhuis in Ede.
+							De game is ontworpen om kinderen en jongeren te kunnen voorbereiden op hun toekomstige opname in het ziekenhuis.
+						</p>
+						<p>
+							<strong>Team:</strong> 2 personen<br />
+							<strong>Project lengte:</strong> 10 weken <br />
+							<strong>Mijn taken:</strong><br />
+							Tijdens dit project zijn mijn grootste taken het maken van de verschillende manieren waarop de speler met de digitale wereld kan interacteren.
+							Dit bevat onder andere de player movement, maar ook het aanwijzen van items binnen de game.
+							<br />
+							<strong>Platform:</strong> Oculus Quest 2<br />
+							<strong>Engine & tools:</strong> Unity + C#<br />
+							<strong>Status:</strong> In uitvoering<br />
+						</p>
+					</section>
+
+				<!-- Two -->
+					<section id="two">
+						<header class="major">
+							<h2>Project screenshots<br /></h2>
+						</header>
+						<div class="row">
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/examen/7.png"/></a>
+								<h3>Free teleportation</h3>
+								<p>Voor de player movement hebben we gekozen voor teleportatie aangezien het grootste gedeelte van toekomstige speler geen ervaring zal hebben met VR
+                                en dus gevoeliger zal zijn voor eventueel ziek worden tijdens het spelen van een VR game.</p>
+							</article>
+
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/examen/4.png"/></a>
+								<h3>Fixed teleportation</h3>
+								<p>Om de toekomstige opname nog beter na te bootsten kan de speler in sommige levels niet vrij rond teleporteren.
+								Dit is gedaan omdat in het echt de speler word rondgereden en hij niet zelf de route mag bepalen.</p>
+							</article>
+
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/examen/8.png"/></a>
+								<h3>Aanwijzen van items</h3>
+								<p>Om de speler de mogelijkheid te geven om informatie te krijgen over objecten waar hij benieuwd naar is, hebben we een aanwijssysteem gemaakt.
+								Hiermee kan de speler een item aanwijzen en verschijnt er informatie over dit item.</p>
+							</article>
+
+							<article class="col-6 col-12-xsmall work-item">
+								<a class="image fit"><img src="images/examen/5.png"/></a>
+								<h3>Verzamelen van Koos</h3>
+								<p>In het Gelderse Vallei ziekenhuis zijn op de jongeren- en kinderafdeling meerdere Koos Kikker afbeeldingen verspreid om het leuker te maken voor de pati&eumlnten.
+								Dit element hebben we ook in de game verwerkt zodat de spelers ook nog een leuke side objective hebben en het niet alleen serieus voelt.</p>
+							</article>
+						</div>
+					</section>
+
+				<!-- Three -->
+					<section id="three">
+						<header class="major">
+							<h2>Code preview<br /></h2>
+						</header>
+
+						<button class="collapsible">Hand.cs</button>
+						<div class="content">
+						<figure>
+							<figcaption>Dit is de update functie uit Hand.cs. Via dit script kan de speler items aanwijzen en hier meer over leren.
+							</figcaption>
+							<pre>
+								<code>// Check if input is given on device on the following buttons
+pointDevice.TryGetFeatureValue(CommonUsages.gripButton, out bool gripped);
+pointDevice.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggered);
+
+// If player presses grip and not trigger
+if (gripped && !triggered)
+{
+    // Start pointing animation
+    leftHandAnimator.SetBool("Pointing", true);
+
+    // Enable pointing line
+    lr.enabled = true;
+    lr.SetPosition(0, forwardPoint.position);
+            
+    // Set end position to max point
+    endPos = forwardPoint.position + (forwardPoint.forward * rayDistance);
+
+    // Shoot raycast from hand forward point
+    if (Physics.Raycast(forwardPoint.position, forwardPoint.forward, out objectHit, rayDistance, pointableLayer))
+    {
+        // Get pointable object
+        lastPointable = objectHit.collider.gameObject.GetComponent<PointableObject>();
+        if(lastPointable != null)
+        {
+            // Check if it is a different pointable
+            if(lastPointable != previousPointable)
+            {
+                // Stop hover on previous pointable
+                previousPointable?.StopHoverOver(this);
+                // Set new previous pointable
+                previousPointable = lastPointable;
+            }
+
+            // Call hover over on pointable object
+            lastPointable.HoverOver(this);
+
+            // Call select on pointable object
+            pointDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool activate);
+            if (activate)
+            {
+                lastPointable.Selected();
+            }
+
+            // Call deselect on pointable object
+            pointDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out bool pressed);
+            if (pressed)
+            {
+                lastPointable.StopHoverOver(this);
+            }
+        }
+
+        // Set end position to pointable object
+        endPos = objectHit.point;
+    }
+    else // If player hits nothing
+    {
+        // Make sure this only happens once
+        if(lastPointable != null)
+        {
+            // Call stop hover on pointable object
+            lastPointable.StopHoverOver(this);
+            lastPointable = null;
+        }
+    }
+
+    // Set lineRenderer end point
+    lr.SetPosition(1, endPos);
+}
+else // If player does not press grip and/or presses trigger
+{
+    // Disable pointing line
+    lr.enabled = false;
+    // Stop pointing animation
+    leftHandAnimator.SetBool("Pointing", false);
+
+    // Make sure this only happens once
+    if (lastPointable != null)
+    {
+        // Call stop hover on pointable object
+        lastPointable.StopHoverOver(this);
+        lastPointable = null;
+    }
+}
+</code>
+							</pre>
+						</figure>
+						</div>
+						<br />
+
+						<button class="collapsible">Teleportation.cs</button>
+						<div class="content">
+						<figure>
+							<figcaption>Dit zijn de twee grootste onderdelen van het teleportatie systeem binnen de game.
+                            Hier word bepaald of de speler kan/mag teleporteren naar de geselecteerde locatie.
+							</figcaption>
+							<pre>
+								<code>private void Update()
+{
+    if (!menuActive)
+    {
+        // Check if input is given on device on the following buttons
+        pointDevice.TryGetFeatureValue(CommonUsages.gripButton, out bool gripped);
+        pointDevice.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggered);
+
+        // If player presses trigger and not grip
+        if (triggered && !gripped)
+        {
+            // Try to get teleportation target at linerenderer end position
+            TryToGetTeleportTarget();
+        }
+        else
+        {
+            // Reset the linerenderer
+            ResetLaser();
+        }
+
+        // If player can teleport at this moment in time
+        if (canTeleport)
+        {
+            // Check if input is given on device on the primary button
+            pointDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButton);
+            // If we have a target and there is input
+            if (targetAcquired == true && primaryButton)
+            {
+                // Start teleport cycle
+                StartCoroutine(TeleportFade());
+            }
+        }
+    }
+}
+
+private void TryToGetTeleportTarget()
+{
+    // (Re)set all values
+    laser.enabled = true;
+    targetAcquired = false;
+    RaycastHit hit;
+    Vector3 origin = laserOrigin.position;
+    laser.SetPosition(0, origin);
+
+    // Loop throug all laser segments
+    for (int i = 0; i < laserSteps - 1; i++)
+    {
+        // Calculate direction of current segment
+        Vector3 direction = (laserOrigin.forward + (Vector3.down * dropPerSegment * i)).normalized * laserSegmentDistance;
+
+        // If current segment raycast hit something
+        if (Physics.Raycast(origin, direction, out hit, laserSegmentDistance))
+        {
+            // Set all remaining laser segments to ensure that they are not floating around
+            for (int j = i + 1; j < laser.positionCount; j++)
+            {
+                laser.SetPosition(j, hit.point);
+            }
+
+            // If player is free to teleport through the level
+            bool canGoToTarget = true;
+            bool validLocation = true;
+            if (freeTeleport)
+            {
+                // Calculate the NavMeshPath to see if it is a valid position to travel to
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(transform.position, hit.point, NavMesh.AllAreas, path);
+                canGoToTarget = path.status == NavMeshPathStatus.PathComplete;
+
+                // Check if target position is on the nav mesh
+                validLocation = NavMesh.SamplePosition(hit.point, out NavMeshHit newHit, 0.05f, NavMesh.AllAreas);
+            }
+
+            // If we hit something we can travel to
+            if (hit.transform.gameObject.layer == collisionLayer && canGoToTarget && validLocation)
+            {
+                // If teleport is available
+                if (canTeleport)
+                {
+                    // Set laser color
+                    laser.startColor = laser.endColor = validTarget;
+                    // Set target position
+                    targetPos = hit.point;
+                    // Set bool for teleport function
+                    targetAcquired = true;
+
+                    // If player is not free to teleport through the level
+                    if (!freeTeleport)
+                    {
+                        // Get selected step
+                        currentTeleportStep = hit.collider.gameObject.transform;
+                        // Set target position to the center of the selected step
+                        targetPos = hit.collider.bounds.center;
+                    }
+                }
+                else // If teleport is NOT available
+                {
+                    // Set laser color
+                    laser.startColor = laser.endColor = waitingOnTimer;
+                }
+                return;
+            }
+            else // If we hit something we can NOT travel to
+            {
+                // Set laser color
+                laser.startColor = laser.endColor = notValidTarget;
+                return;
+            }
+        }
+        else // If current segment raycast did NOT hit something
+        {
+            // Set laser position
+            laser.SetPosition(i + 1, origin + direction);
+            // Set origin for next segment
+            origin += direction;
+        }
+    }
+
+    // If laser did not hit anything
+    laser.startColor = laser.endColor = notValidTarget;
+}
+</code>
+							</pre>
+						</figure>
+						</div>
+						<br />
+
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="https://kit.fontawesome.com/61effd4aaa.js" crossorigin="anonymous"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/collapsible.js"></script>
+			<script src="assets/js/header.js"></script> 
+
+	</body>
+</html>

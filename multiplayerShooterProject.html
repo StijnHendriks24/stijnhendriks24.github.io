@@ -56,8 +56,7 @@
 								<h3>Room menu</h3>
 								<p>Dit is het scherm van de multiplayer room. 
 								Hier is te zien hoeveel mensen er in de room zitten en staat de code om andere te laten joinen.
-								Voor deze screenshot had ik een build draaiend en de editor. 
-								Vandaar dat er twee personen in de room zitten.</p>
+								Voor deze screenshot had ik een build draaiend en de editor aanstaan om te laten zien dat het joinen van een room werkt.</p>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
 								<a class="image fit"><img src="images/shooter/5.png"/></a>
@@ -74,7 +73,7 @@
 							<article class="col-6 col-12-xsmall work-item">
 								<a class="image fit"><img src="images/shooter/8.png"/></a>
 								<h3>Level 2 einde</h3>
-								<p>Als je alle enemies binnen een level dood zijn gaan de liftdeuren open en kun je naar het volgende level.</p>
+								<p>Als alle enemies binnen een level dood zijn gaan de liftdeuren open en kun je naar het volgende level.</p>
 							</article>
 						</div>
 					</section>
@@ -98,7 +97,7 @@ public void JoinRoomOnClick()
     PhotonNetwork.JoinRoom(roomName);
 }
 
-//	Variables to show on the button
+// Variables to show on the button
 public void SetRoom(string nameInput, int sizeInput, int countInput)
 {
     roomName = nameInput;
